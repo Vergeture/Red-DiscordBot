@@ -72,15 +72,15 @@ class Trivia:
             if await get_trivia_by_channel(message.channel):
                 s = await get_trivia_by_channel(message.channel)
                 await s.end_game()
-                await self.bot.say("Trivia stopped.")
+                await self.bot.say("Trivia arrêté.")
             else:
-                await self.bot.say("There's no trivia session ongoing in this channel.")
+                await self.bot.say("Il n'y a pas de trivia en route ici.")
         elif not await get_trivia_by_channel(message.channel):
             t = TriviaSession(message, self.settings)
             self.trivia_sessions.append(t)
             await t.load_questions(message.content)
         else:
-            await self.bot.say("A trivia session is already ongoing in this channel.")
+            await self.bot.say("Il y a déjà un trivia en route.")
 
     async def trivia_list(self, author):
         msg = "**Available trivia lists:** \n\n```"
@@ -106,7 +106,7 @@ class Trivia:
 
 class TriviaSession():
     def __init__(self, message, settings):
-        self.gave_answer = ["I know this one! {}!", "Easy: {}.", "Oh really? It's {} of course."]
+        self.gave_answer = ["Je connais ! {}!", "Facile: {}.", "Vraiment ? C'est {} bien sûr."]
         self.current_q = None # {"QUESTION" : "String", "ANSWERS" : []}
         self.question_list = ""
         self.channel = message.channel
