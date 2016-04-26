@@ -15,10 +15,10 @@ class General:
     def __init__(self, bot):
         self.bot = bot
         self.stopwatches = {}
-        self.ball = ["As I see it, yes", "It is certain", "It is decidedly so", "Most likely", "Outlook good",
-                     "Signs point to yes", "Without a doubt", "Yes", "Yes – definitely", "You may rely on it", "Reply hazy, try again",
-                     "Ask again later", "Better not tell you now", "Cannot predict now", "Concentrate and ask again",
-                     "Don't count on it", "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
+        self.ball = ["Apparemment,oui", "C'est certain", "Je n'en suis pas sûr", "Apparemment", "Il semble que oui",
+                     "Je penche plutôt vers un oui", "Sans aucun doute", "Oui", "Definitivement oui", "Je ne sais pas", "J'ai pas entendu, réessaye",
+                     "Je suis occupé, redemande plus tard", "Je ne te le dirai pas", "Je ne suis pas voyant", "Je ne suis pas là",
+                     "Ahahahah, non.", "Mes sources disent que c'est faux", "Définitivement non", "Je ne pense pas", "J'en doute"]
         self.poll_sessions = []
 
     @commands.command(hidden=True)
@@ -28,9 +28,9 @@ class General:
 
     @commands.command()
     async def choose(self, *choices):
-        """Chooses between multiple choices.
+        """Choississez entre plusieurs choix
 
-        To denote multiple choices, you should use double quotes.
+        Pour dénoter les choix, utiliser des "".
         """
         if len(choices) < 2:
             await self.bot.say('Not enough choices to pick from.')
@@ -39,9 +39,9 @@ class General:
 
     @commands.command(pass_context=True)
     async def roll(self, ctx, number : int = 100):
-        """Rolls random number (between 1 and user choice)
+        """Lance un dé de X faces (Entre 1 et 500)
 
-        Defaults to 100.
+        Défaut est 100
         """
         author = ctx.message.author
         if number > 1:
@@ -60,7 +60,7 @@ class General:
             msg = ""
             if user.id == self.bot.user.id:
                 user = ctx.message.author
-                msg = "Nice try. You think this is funny? How about *this* instead:\n\n"
+                msg = "Bien essayé. Yu penses que c'est drôle ? Qu'en penses-tu de *ça* à la place:\n\n"
             char = "abcdefghijklmnopqrstuvwxyz"
             tran = "ɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎz"
             table = str.maketrans(char, tran)
@@ -71,22 +71,22 @@ class General:
             name = name.translate(table)
             return await self.bot.say(msg + "(╯°□°）╯︵ " + name[::-1])
         else:
-            return await self.bot.say("*flips a coin and... " + randchoice(["HEADS!*", "TAILS!*"]))
+            return await self.bot.say("*Je lance une pièce et... " + randchoice(["FACE!*", "PILE!*"]))
 
     @commands.command(pass_context=True)
     async def rps(self, ctx, choice : str):
-        """Play rock paper scissors"""
+        """Jouer à Pierre Feuille Ciseaux"""
         author = ctx.message.author
-        rpsbot = {"rock" : ":moyai:",
-           "paper": ":page_facing_up:",
-           "scissors":":scissors:"}
+        rpsbot = {"Pierre" : ":moyai:",
+           "Feuille": ":page_facing_up:",
+           "Ciseaux":":scissors:"}
         choice = choice.lower()
         if choice in rpsbot.keys():
             botchoice = randchoice(list(rpsbot.keys()))
             msgs = {
-                "win": " You win {}!".format(author.mention),
-                "square": " We're square {}!".format(author.mention),
-                "lose": " You lose {}!".format(author.mention)
+                "win": " T'as gagné {}!".format(author.mention),
+                "square": " Egalité avec {}!".format(author.mention),
+                "lose": " T'as perdu {}!".format(author.mention)
             }
             if choice == botchoice:
                 await self.bot.say(rpsbot[botchoice] + msgs["square"])
@@ -103,36 +103,36 @@ class General:
             elif choice == "scissors" and botchoice == "paper":
                 await self.bot.say(rpsbot[botchoice] + msgs["win"])
         else:
-            await self.bot.say("Choose rock, paper or scissors.")
+            await self.bot.say("Choisis Pierre, Feuille ou Ciseaux.")
 
     @commands.command(name="8", aliases=["8ball"])
     async def _8ball(self, *question):
-        """Ask 8 ball a question
+        """Demandez à la Boule 8 une question
 
-        Question must end with a question mark.
+        Elle doit finir avec ?
         """
         question = " ".join(question)
         if question.endswith("?") and question != "?":
             return await self.bot.say("`" + randchoice(self.ball) + "`")
         else:
-            return await self.bot.say("That doesn't look like a question.")
+            return await self.bot.say("Ce n'est pas une question ça.")
 
     @commands.command(aliases=["sw"], pass_context=True)
     async def stopwatch(self, ctx):
-        """Starts/stops stopwatch"""
+        """Démarre/Stop un compte à rebours"""
         author = ctx.message.author
         if not author.id in self.stopwatches:
             self.stopwatches[author.id] = int(time.perf_counter())
-            await self.bot.say(author.mention + " Stopwatch started!")
+            await self.bot.say(author.mention + " CaR Démarré !")
         else:
             tmp = abs(self.stopwatches[author.id] - int(time.perf_counter()))
             tmp = str(datetime.timedelta(seconds=tmp))
-            await self.bot.say(author.mention + " Stopwatch stopped! Time: **" + str(tmp) + "**")
+            await self.bot.say(author.mention + " CaR stoppé ! Temps: **" + str(tmp) + "**")
             self.stopwatches.pop(author.id, None)
 
     @commands.command()
     async def lmgtfy(self, *text):
-        """Creates a lmgtfy link"""
+        """Crée un lien ""
         if text == ():
             await self.bot.say("lmgtfy [search terms]")
             return
@@ -248,9 +248,9 @@ class General:
             if p.author == message.author.id: # or isMemberAdmin(message)
                 await self.getPollByChannel(message).endPoll()
             else:
-                await self.bot.say("Only admins and the author can stop the poll.")
+                await self.bot.say("Il n'y a que les Admins qui peuvent arrêter le poll")
         else:
-            await self.bot.say("There's no poll ongoing in this channel.")
+            await self.bot.say("Il y a déjà un pool en route.")
 
     def getPollByChannel(self, message):
         for poll in self.poll_sessions:
